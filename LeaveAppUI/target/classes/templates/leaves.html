@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Leaves System</title>
+  <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+
+<h3>Employee Leaves</h3>
+
+<form th:action="@{/secure/newLeave}" method="POST" th:object="${leave}">
+  <table border='1' cellspacing='0' cellpadding='10'>
+    <tr><td>From Date:</td> <td> <input type="date" th:field="*{fromDate}"/> </td></tr>
+    <div class="alert alert-warning" th:if="${#fields.hasErrors('fromDate')}" th:errors="*{fromDate}"></div>
+    <tr><td>To Date:</td> <td> <input type="date" th:field="*{toDate}"/> </td></tr>
+    <div class="alert alert-warning" th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}"></div>
+    <tr><td>Reason:</td> <td> <input type="text" th:field="*{reason}"/> </td></tr>
+    <div class="alert alert-warning" th:if="${#fields.hasErrors('reason')}" th:errors="*{reason}"></div>
+    <tr><td colspan='2' align='center'> <input type="submit" value="Request"/> </td> </tr>
+  </table>
+</form>
+
+<table border='1' cellspacing='0' cellpadding='10'>
+  <thead><tr><th>Id</th><th>From Date</th><th>To Date</th><th>Reason</th><th>Status</th><td>Action</td></tr></thead>
+  <tbody>
+  <tr th:each="leave : ${leaves}">
+    <td><label type="text"
+               th:text="${leave.id}" /></td>
+    <td><label type="text"
+               th:text="${leave.fromDate}" /></td>
+    <td><label type="text"
+                th:text="${leave.toDate}"/></td>
+    <td><label type="text"
+                th:text="${leave.reason}"/></td>
+    <td th:switch="${leave.status}">
+      <span th:case="'0'">NEW</span>
+      <span th:case="'1'">CANCELED</span>
+      <span th:case="'2'">APPROVED</span>
+      <span th:case="'3'">REJECTED</span>
+    </td>
+    <td th:switch="${leave.status}">
+      <span th:case="'0'"><a th:href="@{/cancelLeave/{id}(id = ${leave.id})}">Cancel</a></span>
+      <span th:case="'1'">NONE</span>
+      <span th:case="'2'">NONE</span>
+      <span th:case="'3'">NONE</span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
